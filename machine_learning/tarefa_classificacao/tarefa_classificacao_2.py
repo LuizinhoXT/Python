@@ -1,5 +1,8 @@
 import pandas as pd 
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+
 
 
 # Base de dados utilizada no estudo
@@ -23,12 +26,13 @@ dados = dados.rename(columns=mapa)
 # Output: Colunas: ['pagina_inicial', 'como_funciona', 'contato', 'comprou'] | Tamanho: (99, 4)
 
 
-
 # Separando as variáveis X e Y do conjunto principal
 
 x = dados[['pagina_inicial', 'como_funciona', 'contato']]
 y = dados['comprou']
 
+"""
+Quando os dados foram treinados com uma separação manual, o resultado foi de 93,83% de acurácia
 
 # Dados para treino com 75 elementos
 treino_x = x[:75]
@@ -37,6 +41,17 @@ treino_y = y[:75]
 # Dados para teste com 24 elemtnos
 teste_x = x[75:]
 teste_y = y[75:]
+
+"""
+
+# contante para limitar a aleatoriedade da separação de dados da biblioteca do Sk Learn
+SEED = 20
+
+# Atribuindo uma referência ao conjunto de y para realizar uma estratifição que possa gerar os dados de treino e teste de maneira proporcional com base em y
+strfy = y
+
+# Outra maneira de separar os dados de treino e teste, no qual a separação de elementos é aleatória.
+treino_x, teste_x, treino_y, teste_y = train_test_split(x, y, random_state = SEED, test_size = 0.25, stratify = strfy)
 
 # Função para instanciar e treinar o modelo com os dados de treino
 def treino(vars_x, vars_y):
@@ -56,4 +71,8 @@ predicao = modelo_treinado.predict(teste_x)
 # Medição da acurácia do modelo comparando os valores verdadeiros com os valores da predicao do modelo.
 acuracia = accuracy_score(teste_y, predicao) * 100
 
-print("a curácia foi %.2f%%" % acuracia)
+# print("a curácia foi %.2f%%" % acuracia)
+
+print(f"treino y: \n {treino_y.value_counts()}", )
+print(f"teste y: \n {teste_y.value_counts()}", )
+
