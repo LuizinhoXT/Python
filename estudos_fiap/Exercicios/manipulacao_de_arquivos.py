@@ -26,4 +26,4 @@ print(arquivo2.readline())
 arquivo1.close()
 arquivo2.close()
 
-------------
+
